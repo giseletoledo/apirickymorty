@@ -13,9 +13,8 @@ class HomeViewCell:UITableViewCell {
     
     // Informações que aparecem dentro de cada cell da tabela
     
-    
     //titulo
-    private lazy var tituloLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         return label
@@ -65,7 +64,7 @@ class HomeViewCell:UITableViewCell {
     private func setupSubviews() {
         // Adicione as visualizações à célula
         addSubview(leftImageView)
-        addSubview(tituloLabel)
+        addSubview(titleLabel)
         addSubview(statusLabel)
         addSubview(locationLabel)
         addSubview(memoriesLabel)
@@ -76,7 +75,7 @@ class HomeViewCell:UITableViewCell {
         // Você pode ajustar os valores de espaçamento, alinhamento, etc., conforme necessário
         
         leftImageView.translatesAutoresizingMaskIntoConstraints = false
-        tituloLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         memoriesLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -89,11 +88,11 @@ class HomeViewCell:UITableViewCell {
             leftImageView.heightAnchor.constraint(equalToConstant: 50),
             
             // Restrições para os rótulos de texto
-            tituloLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            tituloLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
-            tituloLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
-            statusLabel.topAnchor.constraint(equalTo: tituloLabel.bottomAnchor, constant: 8),
+            statusLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             statusLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             statusLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
@@ -108,18 +107,11 @@ class HomeViewCell:UITableViewCell {
         ])
     }
     
-    
-}
-
-extension UITableViewCell {
-    var configure: (String, String, String, String) -> Void {
-        get {
-            return { titulo, status, location, memories in
-                self.tituloLabel.text = titulo
-                self.statusLabel.text = status
-                self.locationLabel.text = location
-                self.memoriesLabel.text = memories
-            }
-        }
-    }
+    func configure(title: String, status: String, location: String, memories: String, imageName: String) {
+          titleLabel.text = title
+          statusLabel.text = status
+          locationLabel.text = location
+          memoriesLabel.text = memories
+          leftImageView.image = UIImage(named: imageName)
+      }
 }
