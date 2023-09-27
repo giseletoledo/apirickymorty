@@ -30,8 +30,15 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewCell().listViewCellIdentifier)!
+        // Configure a célula com dados fictícios para teste
+        cell.configure("Quantum Rick",
+                       "Unknown",
+                       "Last known location: Earth",
+                       "Rick's Memories: Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
         //cell.textLabel?.text = self.listItems[indexPath.row]
         cell.backgroundColor = .yellow
         return cell
     }
+    
+    
 }
