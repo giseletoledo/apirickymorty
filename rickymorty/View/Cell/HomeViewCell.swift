@@ -66,12 +66,6 @@ class HomeViewCell:UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        // Adiciona espaçamento ao conteúdo da célula
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
-    }
     
     private func setupSubviews() {
         // Adicione as visualizações à célula
@@ -87,6 +81,7 @@ class HomeViewCell:UITableViewCell {
         self.layer.cornerRadius = 10
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.lightGray.cgColor
+
         
         // Adicione uma sombra simples
         self.layer.shadowColor = UIColor.black.cgColor

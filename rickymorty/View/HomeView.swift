@@ -31,7 +31,12 @@ class HomeView:UIView {
     func configureProtocols(datasource: UITableViewDataSource){
         tableView.dataSource = datasource
     }
-    
+    func setTableViewDelegate(_ delegate: UITableViewDelegate) {
+           tableView.delegate = delegate
+    }
+    func updateTableView() {
+            tableView.reloadData()
+        }
 }
 
 extension HomeView{
