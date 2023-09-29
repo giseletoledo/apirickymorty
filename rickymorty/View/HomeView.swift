@@ -14,8 +14,8 @@ class HomeView:UIView {
         
         let tableView = UITableView(frame: .zero)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .blue
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: HomeViewCell().listViewCellIdentifier)
+        tableView.backgroundColor = .white
+        tableView.register(HomeViewCell.self, forCellReuseIdentifier: HomeViewCell().listViewCellIdentifier)
         return tableView
     }()
     
