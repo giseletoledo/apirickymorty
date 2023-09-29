@@ -13,6 +13,14 @@ class HomeViewCell:UITableViewCell {
     
     // Informações que aparecem dentro de cada cell da tabela
     
+    //container
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        return view
+    }()
+    
     //titulo
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -69,11 +77,12 @@ class HomeViewCell:UITableViewCell {
     
     private func setupSubviews() {
         // Adicione as visualizações à célula
-        addSubview(leftImageView)
-        addSubview(titleLabel)
-        addSubview(statusLabel)
-        addSubview(locationLabel)
-        addSubview(memoriesLabel)
+        containerView.addSubview(leftImageView)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(statusLabel)
+        containerView.addSubview(locationLabel)
+        containerView.addSubview(memoriesLabel)
+        addSubview(containerView)
     }
     
     private func setupAppearance() {
@@ -82,7 +91,6 @@ class HomeViewCell:UITableViewCell {
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.lightGray.cgColor
 
-        
         // Adicione uma sombra simples
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.2
@@ -102,32 +110,38 @@ class HomeViewCell:UITableViewCell {
         memoriesLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            // Restrições para o containerView
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            containerView.heightAnchor.constraint(equalToConstant: 120),
+
             // Restrições para a imagem à esquerda
-               leftImageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-               leftImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-               leftImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-               leftImageView.widthAnchor.constraint(equalToConstant: 100),
-               leftImageView.heightAnchor.constraint(equalToConstant: 100),
-               
+            leftImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            leftImageView.widthAnchor.constraint(equalToConstant: 100),
+            leftImageView.heightAnchor.constraint(equalToConstant: 100),
 
-               // Restrições para os rótulos de texto
-               titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-               titleLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
-               titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            // Restrições para os rótulos de texto
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-               statusLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-               statusLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
-               statusLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            statusLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            statusLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
+            statusLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-               locationLabel.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 8),
-               locationLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
-               locationLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            locationLabel.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 8),
+            locationLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
+            locationLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-               memoriesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
-               memoriesLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
-               memoriesLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-               memoriesLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
-           ])
+            memoriesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
+            memoriesLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
+            memoriesLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+        ])
+
     }
     
     func configure(title: String, status: String, location: String, memories: String, imageName: String) {

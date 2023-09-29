@@ -8,8 +8,7 @@
 import UIKit
 
 class HomeView:UIView {
-    
-    
+        
     private lazy var tableView: UITableView = {
         
         let tableView = UITableView(frame: .zero)
