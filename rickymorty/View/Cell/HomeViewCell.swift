@@ -58,7 +58,7 @@ class HomeViewCell:UITableViewCell {
     private lazy var leftImageView: UIImageView = {
         let imageView = UIImageView()
         // Configurar a imagem à esquerda
-//        imageView.image = UIImage(named: "image1")
+        //        imageView.image = UIImage(named: "image1")
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -90,7 +90,7 @@ class HomeViewCell:UITableViewCell {
         self.containerView.layer.cornerRadius = 10
         self.containerView.layer.borderWidth = 1
         self.containerView.layer.borderColor = UIColor(named: ColorsHex.green02)?.cgColor
-
+        
         // Adicione uma sombra simples
         self.containerView.layer.shadowColor = UIColor(named: ColorsHex.green02)?.cgColor
         self.containerView.layer.shadowOpacity = 0.1
@@ -115,33 +115,33 @@ class HomeViewCell:UITableViewCell {
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-
+            
             // Restrições para a imagem à esquerda
             leftImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
             leftImageView.widthAnchor.constraint(equalToConstant: 100),
-//            leftImageView.heightAnchor.constraint(equalToConstant: 100),
-
+            //            leftImageView.heightAnchor.constraint(equalToConstant: 100),
+            
             // Restrições para os rótulos de texto
             titleLabel.topAnchor.constraint(equalTo: leftImageView.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-
+            
             statusLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             statusLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             statusLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-
+            
             locationLabel.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 8),
             locationLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             locationLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-
+            
             memoriesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
             memoriesLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             memoriesLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             memoriesLabel.bottomAnchor.constraint(equalTo: leftImageView.bottomAnchor)
         ])
-
+        
     }
     
     func configure(model:RickModel) {
@@ -149,15 +149,23 @@ class HomeViewCell:UITableViewCell {
         statusLabel.text = model.status
         locationLabel.text = model.lastKnownLocation
         memoriesLabel.text = model.memories
-        let image = model.imageNames
-        if image != nil {
-            print("printando image: \(image)")
-            DispatchQueue.main.async {
-                self.leftImageView.image = UIImage(named: image)
-                print("printando leftImageView.image: \(self.leftImageView.image)")
-            }
-//            leftImageView.image = UIImage(named: image)
-//            print("printando leftImageView.image: \(leftImageView.image)")
+        let imageURLString = model.imageNames
+        
+        if let imageURL = URL(string: imageURLString) {
+            // Use URLSession para baixar a imagem de forma assíncrona
+            URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
+                if let error = error {
+                    print("Erro ao baixar a imagem: \(error)")
+                    return
+                }
+                
+                if let data = data, let image = UIImage(data: data) {
+                    // Configure a imagem na thread principal
+                    DispatchQueue.main.async {
+                        self.leftImageView.image = image
+                    }
+                }
+            }.resume()
         }
         
     }
