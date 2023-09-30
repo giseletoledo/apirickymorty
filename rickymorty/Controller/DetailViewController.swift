@@ -55,13 +55,13 @@ class DetailViewController: UIViewController {
     var memoriesText: String?
     
     // Inicializador personalizado para receber os dados.
-    init(title: String?, status: String?, location: String?, memories: String?, image: UIImage?) {
+    init(selectedModel:RickModel) {
         super.init(nibName: nil, bundle: nil)
-        self.titleText = title
-        self.statusText = status
-        self.locationText = location
-        self.memoriesText = memories
-        self.image = image
+        self.titleText = selectedModel.title
+        self.statusText = selectedModel.status
+        self.locationText = selectedModel.lastKnownLocation
+        self.memoriesText = selectedModel.memories
+        self.image = UIImage(named: selectedModel.imageNames)
     }
     
     required init?(coder: NSCoder) {

@@ -9,14 +9,7 @@ import UIKit
 
 class ViewController: UIViewController, UINavigationControllerDelegate {
     
-    // Configure a célula com dados fictícios para teste
-    let titles = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-    let statuses = ["Status 1", "Status 2", "Status 3", "Status 4", "Status 5"]
-    let locations = ["Location 1", "Location 2", "Location 3", "Location 4", "Location 5"]
-    let memories = ["Memories 1", "Memories 2", "Memories 3", "Memories 4", "Memories 5"]
-    
-    // Especifique o nome da imagem com base no índice da linha
-    let imageNames = ["image1", "image2", "image3", "image4", "image1"]
+    private var arrayRickModel:[RickModel] = []
     
     private lazy var homeView:HomeView = {
         let homeView = HomeView()
@@ -30,8 +23,17 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         // Do any additional setup after loading the view.
         view.backgroundColor = .red
         view = homeView
+        fetchModel()
         homeView.configureProtocols(datasource: self)
         navigationController?.delegate = self
+    }
+    
+    fileprivate func fetchModel() {
+        arrayRickModel.append(RickModel(title: "Item 1", status: "Status 1", lastKnownLocation: "Location 1", memories: "Memories 1", imageNames: "image1"))
+        arrayRickModel.append(RickModel(title: "Item 2", status: "Status 2", lastKnownLocation: "Location 2", memories: "Memories 2", imageNames: "image2"))
+        arrayRickModel.append(RickModel(title: "Item 3", status: "Status 3", lastKnownLocation: "Location 3", memories: "Memories 3", imageNames: "image3"))
+        arrayRickModel.append(RickModel(title: "Item 4", status: "Status 4", lastKnownLocation: "Location 4", memories: "Memories 4", imageNames: "image4"))
+        arrayRickModel.append(RickModel(title: "Item 5", status: "Status 5", lastKnownLocation: "Location 5", memories: "Memories 5", imageNames: "image1"))
     }
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -43,11 +45,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     }
 }
 
-
-
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return arrayRickModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -58,10 +58,7 @@ extension ViewController: UITableViewDataSource {
         }
         
         // Verifique se o índice está dentro dos limites do array de nomes de imagem
-        if indexPath.row < imageNames.count {
-            cell.configure(title: titles[indexPath.row], status: statuses[indexPath.row], location: locations[indexPath.row], memories: memories[indexPath.row], imageName: imageNames[indexPath.row])
-        }
-        
+        cell.configure(model: arrayRickModel[indexPath.row])
         cell.backgroundColor = .white
         return cell
     }
@@ -70,20 +67,9 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Verifique se o índice está dentro dos limites do array de nomes de imagem
-        guard indexPath.row < imageNames.count else {
-            return
-        }
-        
-        // Obtenha os dados da célula selecionada
-        let title = titles[indexPath.row]
-        let status = statuses[indexPath.row]
-        let location = locations[indexPath.row]
-        let memories = memories[indexPath.row]
-        let imageName = imageNames[indexPath.row]
         
         // Crie uma instância da DetailViewController com os dados da célula selecionada
-        let detailViewController = DetailViewController(title: title, status: status, location: location, memories: memories, image: UIImage(named: imageName))
+        let detailViewController = DetailViewController(selectedModel: arrayRickModel[indexPath.row])
         
         // Apresente a DetailViewController
         navigationController?.pushViewController(detailViewController, animated: true)

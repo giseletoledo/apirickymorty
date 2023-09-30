@@ -15,6 +15,7 @@ class HomeView:UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .white
         tableView.register(HomeViewCell.self, forCellReuseIdentifier: HomeViewCell().listViewCellIdentifier)
+        tableView.separatorStyle = .none
         return tableView
     }()
     

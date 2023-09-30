@@ -77,26 +77,26 @@ class HomeViewCell:UITableViewCell {
     
     private func setupSubviews() {
         // Adicione as visualizações à célula
+        addSubview(containerView)
         containerView.addSubview(leftImageView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(statusLabel)
         containerView.addSubview(locationLabel)
         containerView.addSubview(memoriesLabel)
-        addSubview(containerView)
     }
     
     private func setupAppearance() {
         // Adicione uma borda arredondada cinza
-        self.layer.cornerRadius = 10
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.lightGray.cgColor
+        self.containerView.layer.cornerRadius = 10
+        self.containerView.layer.borderWidth = 1
+        self.containerView.layer.borderColor = UIColor(named: ColorsHex.green02)?.cgColor
 
         // Adicione uma sombra simples
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.2
-        self.layer.shadowOffset = CGSize(width: 2, height: 2)
-        self.layer.shadowRadius = 2
-        self.layer.masksToBounds = false
+        self.containerView.layer.shadowColor = UIColor(named: ColorsHex.green02)?.cgColor
+        self.containerView.layer.shadowOpacity = 0.1
+        self.containerView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        self.containerView.layer.shadowRadius = 2
+        self.containerView.layer.masksToBounds = false
     }
     
     private func setupConstraints() {
@@ -111,21 +111,20 @@ class HomeViewCell:UITableViewCell {
         
         NSLayoutConstraint.activate([
             // Restrições para o containerView
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            containerView.heightAnchor.constraint(equalToConstant: 120),
+            containerView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
 
             // Restrições para a imagem à esquerda
-            leftImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            leftImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
             leftImageView.widthAnchor.constraint(equalToConstant: 100),
             leftImageView.heightAnchor.constraint(equalToConstant: 100),
 
             // Restrições para os rótulos de texto
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: leftImageView.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
@@ -140,15 +139,16 @@ class HomeViewCell:UITableViewCell {
             memoriesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
             memoriesLabel.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 16),
             memoriesLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            memoriesLabel.bottomAnchor.constraint(equalTo: leftImageView.bottomAnchor)
         ])
 
     }
     
-    func configure(title: String, status: String, location: String, memories: String, imageName: String) {
-          titleLabel.text = title
-          statusLabel.text = status
-          locationLabel.text = location
-          memoriesLabel.text = memories
-          leftImageView.image = UIImage(named: imageName)
+    func configure(model:RickModel) {
+        titleLabel.text = model.title
+        statusLabel.text = model.status
+        locationLabel.text = model.lastKnownLocation
+        memoriesLabel.text = model.memories
+        leftImageView.image = UIImage(named: model.imageNames)
       }
 }
