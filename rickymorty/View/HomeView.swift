@@ -28,15 +28,14 @@ class HomeView:UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configureProtocols(datasource: UITableViewDataSource){
+    func configureProtocols(datasource: UITableViewDataSource, delegate: UITableViewDelegate){
         tableView.dataSource = datasource
+        tableView.delegate = delegate
     }
-    func setTableViewDelegate(_ delegate: UITableViewDelegate) {
-           tableView.delegate = delegate
-    }
+
     func updateTableView() {
-            tableView.reloadData()
-        }
+        tableView.reloadData()
+    }
 }
 
 extension HomeView{
