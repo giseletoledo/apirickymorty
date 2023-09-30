@@ -58,8 +58,8 @@ class HomeViewCell:UITableViewCell {
     private lazy var leftImageView: UIImageView = {
         let imageView = UIImageView()
         // Configurar a imagem à esquerda
-        imageView.image = UIImage(named: "image1")
-        imageView.contentMode = .scaleAspectFit
+//        imageView.image = UIImage(named: "image1")
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -121,7 +121,7 @@ class HomeViewCell:UITableViewCell {
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
             leftImageView.widthAnchor.constraint(equalToConstant: 100),
-            leftImageView.heightAnchor.constraint(equalToConstant: 100),
+//            leftImageView.heightAnchor.constraint(equalToConstant: 100),
 
             // Restrições para os rótulos de texto
             titleLabel.topAnchor.constraint(equalTo: leftImageView.topAnchor),
@@ -149,6 +149,16 @@ class HomeViewCell:UITableViewCell {
         statusLabel.text = model.status
         locationLabel.text = model.lastKnownLocation
         memoriesLabel.text = model.memories
-        leftImageView.image = UIImage(named: model.imageNames)
-      }
+        let image = model.imageNames
+        if image != nil {
+            print("printando image: \(image)")
+            DispatchQueue.main.async {
+                self.leftImageView.image = UIImage(named: image)
+                print("printando leftImageView.image: \(self.leftImageView.image)")
+            }
+//            leftImageView.image = UIImage(named: image)
+//            print("printando leftImageView.image: \(leftImageView.image)")
+        }
+        
+    }
 }
