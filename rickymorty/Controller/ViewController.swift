@@ -89,8 +89,9 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Crie uma instância da DetailViewController com os dados da célula selecionada
-        let detailViewController = DetailViewController(selectedModel: arrayRickModel[indexPath.row])
-        
+        let selectedModel = arrayRickModel[indexPath.row]
+        let detailViewController = DetailViewController(selectedModel: selectedModel)
+        detailViewController.imageURL = URL(string: selectedModel.imageNames)
         // Apresente a DetailViewController
         navigationController?.pushViewController(detailViewController, animated: true)
     }

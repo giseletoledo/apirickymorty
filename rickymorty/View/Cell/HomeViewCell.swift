@@ -121,7 +121,7 @@ class HomeViewCell:UITableViewCell {
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
             leftImageView.widthAnchor.constraint(equalToConstant: 100),
-            //            leftImageView.heightAnchor.constraint(equalToConstant: 100),
+            leftImageView.heightAnchor.constraint(equalToConstant: 100),
             
             // Restrições para os rótulos de texto
             titleLabel.topAnchor.constraint(equalTo: leftImageView.topAnchor),

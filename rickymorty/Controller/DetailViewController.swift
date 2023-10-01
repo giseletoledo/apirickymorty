@@ -9,6 +9,9 @@ import UIKit
 
 class DetailViewController: UIViewController {
     // Declare as visualizações e rótulos necessários para mostrar os dados detalhados e a imagem.
+    
+    var imageURL: URL?
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
@@ -81,8 +84,28 @@ class DetailViewController: UIViewController {
         statusLabel.text = statusText
         locationLabel.text = locationText
         memoriesLabel.text = memoriesText
-        imageView.image = image
+        downloadImage() 
     }
+    
+    private func downloadImage() {
+        guard let imageURL = imageURL else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: imageURL) { [weak self] (data, response, error) in
+            guard let data = data, error == nil else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                // Crie uma imagem a partir dos dados baixados
+                if let image = UIImage(data: data) {
+                    self?.imageView.image = image
+                }
+            }
+        }.resume()
+    }
+
     
     private func setupSubviews() {
         // Adicione as visualizações à view da detalhe e defina as restrições.
