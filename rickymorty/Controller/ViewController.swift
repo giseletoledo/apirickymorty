@@ -48,15 +48,13 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         networkManager.get(request: request) { (result: Result<RickAPI, Error>) in
             switch result {
             case .success(let apiresults):
-                print("repositories: \(apiresults)")
-                if apiresults != nil {
+                print("apiresults: \(apiresults)")
                     let data = apiresults
                     if let characters = data.results {
                         for item in characters {
                             self.arrayRickModel.append(RickModel(title: item.name, status: item.status, lastKnownLocation: item.location?.name ?? "TESTE", memories: item.species, imageNames: item.image))
                         }
                     }
-                }
                 completion(.success(apiresults))
             case .failure(let error):
                 print("Erro ao buscar dados: \(error)")
