@@ -27,7 +27,6 @@ struct InfoResponse: Codable {
         self.next = next
         self.prev = prev
     }
-    
 }
 
 struct Results: Codable {
@@ -55,6 +54,7 @@ struct Results: Codable {
         self.episode = episode
     }
 }
+
 struct OriginResponse: Codable {
     let name: String
     let url: String
@@ -64,6 +64,7 @@ struct OriginResponse: Codable {
         self.url = url
     }
 }
+
 struct LocationResponse: Codable {
     let name: String
     let url: String
@@ -73,7 +74,6 @@ struct LocationResponse: Codable {
         self.url = url
     }
 }
-
 
 struct RickModel {
     let title: String

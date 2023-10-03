@@ -58,8 +58,7 @@ class HomeViewCell:UITableViewCell {
     private lazy var leftImageView: UIImageView = {
         let imageView = UIImageView()
         // Configurar a imagem à esquerda
-        //        imageView.image = UIImage(named: "image1")
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -88,13 +87,19 @@ class HomeViewCell:UITableViewCell {
     private func setupAppearance() {
         // Adicione uma borda arredondada cinza
         self.containerView.layer.cornerRadius = 10
+        
+        let borderColor = UIColor(named: "ColorBorderGreen")
+        let shadowColor = UIColor(named: "ColorShadowGreen")
+        
+        // Crie uma nova cor verde com um valor alpha (transparência)
+      
+        self.containerView.layer.borderColor = borderColor?.cgColor
+        
         self.containerView.layer.borderWidth = 1
-        self.containerView.layer.borderColor = UIColor(named: ColorsHex.green02)?.cgColor
         
         // Adicione uma sombra simples
-        self.containerView.layer.shadowColor = UIColor(named: ColorsHex.green02)?.cgColor
-        self.containerView.layer.shadowOpacity = 0.1
-        self.containerView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        self.containerView.layer.shadowColor = shadowColor?.cgColor
+        self.containerView.layer.shadowOffset = CGSize(width: 4, height: 4)
         self.containerView.layer.shadowRadius = 2
         self.containerView.layer.masksToBounds = false
     }
@@ -143,6 +148,7 @@ class HomeViewCell:UITableViewCell {
         ])
         
     }
+    
     
     func configure(model:RickModel) {
         titleLabel.text = model.title

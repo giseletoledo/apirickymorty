@@ -47,17 +47,17 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         let request = URLRequest(url: url)
         networkManager.get(request: request) { (result: Result<RickAPI, Error>) in
             switch result {
-            case .success(let repositories):
-                print("repositories: \(repositories)")
-                if repositories != nil {
-                    let data = repositories
+            case .success(let apiresults):
+                print("repositories: \(apiresults)")
+                if apiresults != nil {
+                    let data = apiresults
                     if let characters = data.results {
                         for item in characters {
                             self.arrayRickModel.append(RickModel(title: item.name, status: item.status, lastKnownLocation: item.location?.name ?? "TESTE", memories: item.species, imageNames: item.image))
                         }
                     }
                 }
-                completion(.success(repositories))
+                completion(.success(apiresults))
             case .failure(let error):
                 print("Erro ao buscar dados: \(error)")
                 completion(.failure(error))
@@ -68,7 +68,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrayRickModel.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -79,7 +79,7 @@ extension ViewController: UITableViewDataSource {
         }
         
         // Verifique se o índice está dentro dos limites do array de nomes de imagem
-        cell.configure(model: arrayRickModel[indexPath.row])
+        cell.configure(model: arrayRickModel[indexPath.section])
         cell.backgroundColor = .white
         return cell
     }
@@ -89,11 +89,15 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Crie uma instância da DetailViewController com os dados da célula selecionada
-        let selectedModel = arrayRickModel[indexPath.row]
+        let selectedModel = arrayRickModel[indexPath.section]
         let detailViewController = DetailViewController(selectedModel: selectedModel)
         detailViewController.imageURL = URL(string: selectedModel.imageNames)
         // Apresente a DetailViewController
         navigationController?.pushViewController(detailViewController, animated: true)
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return arrayRickModel.count
     }
 }
 
