@@ -8,6 +8,21 @@
 import UIKit
 
 class HomeView:UIView {
+    
+    private lazy var titleLabel: UILabel = {
+           let label = UILabel()
+           label.translatesAutoresizingMaskIntoConstraints = false
+           label.font = UIFont.boldSystemFont(ofSize: 24)
+           label.textColor = .white
+           label.text = "Characters"
+           return label
+       }()
+       
+       private lazy var searchBar: UISearchBar = {
+           let searchBar = UISearchBar()
+           searchBar.translatesAutoresizingMaskIntoConstraints = false
+           return searchBar
+       }()
         
     private lazy var tableView: UITableView = {
         
@@ -39,18 +54,28 @@ class HomeView:UIView {
 }
 
 extension HomeView{
+    
     func configureSubviews() {
-        
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.searchBar)
         self.addSubview(self.tableView)
     }
     
     func configureSubviewsConstraints() {
         
         NSLayoutConstraint.activate([
-            self.tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.tableView.topAnchor.constraint(equalTo: self.topAnchor),
-            self.tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            
+            titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+                       
+                       searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+                       searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+                       searchBar.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+                       
+                       tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
+                       tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                       tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                       tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
 }
