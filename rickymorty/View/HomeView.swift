@@ -13,13 +13,14 @@ class HomeView:UIView {
            let label = UILabel()
            label.translatesAutoresizingMaskIntoConstraints = false
            label.font = UIFont.boldSystemFont(ofSize: 24)
-           label.textColor = .white
+           label.textColor = .darkGray
            label.text = "Characters"
            return label
        }()
        
        private lazy var searchBar: UISearchBar = {
            let searchBar = UISearchBar()
+           searchBar.backgroundColor = .white
            searchBar.translatesAutoresizingMaskIntoConstraints = false
            return searchBar
        }()
@@ -56,9 +57,9 @@ class HomeView:UIView {
 extension HomeView{
     
     func configureSubviews() {
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.searchBar)
-        self.addSubview(self.tableView)
+        self.addSubview(titleLabel)
+        self.addSubview(searchBar)
+        self.addSubview(tableView)
     }
     
     func configureSubviewsConstraints() {

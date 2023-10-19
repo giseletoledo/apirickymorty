@@ -18,9 +18,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        view.backgroundColor = .red
         view = homeView
+        view.backgroundColor = .white
         // Carregue os dados da API quando a vista é carregada
         loadMoreData { _ in
             print("arrayRickModel: \(self.arrayRickModel)")
