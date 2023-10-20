@@ -10,7 +10,11 @@ import UIKit
 class ViewController: UIViewController, UINavigationControllerDelegate {
     
     private var arrayRickModel: [RickModel] = []
+    private var results: [RickModel] = []
     var currentPage = 1 // Mantenha o controle da página atual
+    
+    var isSearching = false
+
     
     private let networkManager: NetworkManagerProtocol = NetworkManager()
         
@@ -29,7 +33,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
             }
         }
         
-        homeView.configureProtocols(datasource: self, delegate: self)
+        homeView.configureProtocols(datasource: self, delegate: self, searchBarDelegate: self)
         navigationController?.delegate = self
     }
 
@@ -51,8 +55,12 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
                     let data = apiresults
                     if let characters = data.results {
                         for item in characters {
-                            self.arrayRickModel.append(RickModel(title: item.name, status: item.status, lastKnownLocation: item.location?.name ?? "TESTE", memories: item.species, imageNames: item.image))
-                        }
+                            // Check if the item already exists in the arrayRickModel
+                                                    if !self.arrayRickModel.contains(where: { rickModel in rickModel.title == item.name }) {
+                                                        self.arrayRickModel.append(RickModel(title: item.name, status: item.status,
+                                                                               lastKnownLocation: item.location?.name ?? "TESTE",
+                                                                               memories: item.species, imageNames: item.image))
+                                                    }                        }
                     }
                 completion(.success(apiresults))
             case .failure(let error):
@@ -63,9 +71,37 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     }
 }
 
+
+extension ViewController: UISearchBarDelegate {
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Filter the arrayRickModel based on the searchText
+        isSearching = !searchText.isEmpty
+        
+        // Limpe a array de resultados
+        results.removeAll()
+        
+        if isSearching {
+                results = arrayRickModel.filter { rickModel in
+                    rickModel.title.lowercased().contains(searchText.lowercased())
+                }
+            } else {
+                results = arrayRickModel // Redefina para os resultados originais
+            }
+        
+        // Update the tableView with the filtered results
+        homeView.updateTableView()
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
+
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return isSearching ? results.count : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,7 +112,16 @@ extension ViewController: UITableViewDataSource {
         }
         
         // Verifique se o índice está dentro dos limites do array de nomes de imagem
-        cell.configure(model: arrayRickModel[indexPath.section])
+        if isSearching {
+            
+            let model = results[indexPath.row]
+                            // Use the model to configure the cell
+                            cell.configure(model: model)
+                       
+           } else {
+               let model = arrayRickModel[indexPath.section] // Use os dados originais
+               cell.configure(model: model)
+           }
         cell.backgroundColor = .white
         return cell
     }
@@ -86,7 +131,13 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Crie uma instância da DetailViewController com os dados da célula selecionada
-        let selectedModel = arrayRickModel[indexPath.section]
+        let selectedModel: RickModel
+           
+           if isSearching {
+               selectedModel = results[indexPath.row]
+           } else {
+               selectedModel = arrayRickModel[indexPath.section]
+           }
         let detailViewController = DetailViewController(selectedModel: selectedModel)
         detailViewController.imageURL = URL(string: selectedModel.imageNames)
         // Apresente a DetailViewController
@@ -94,9 +145,10 @@ extension ViewController: UITableViewDelegate {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return arrayRickModel.count
+        return isSearching ? 1 : arrayRickModel.count
     }
 }
+
 
 
 protocol NetworkManagerProtocol {

@@ -44,9 +44,10 @@ class HomeView:UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configureProtocols(datasource: UITableViewDataSource, delegate: UITableViewDelegate){
+    func configureProtocols(datasource: UITableViewDataSource, delegate: UITableViewDelegate, searchBarDelegate: UISearchBarDelegate){
         tableView.dataSource = datasource
         tableView.delegate = delegate
+        searchBar.delegate = searchBarDelegate
     }
 
     func updateTableView() {
@@ -80,5 +81,7 @@ extension HomeView{
         ])
     }
 }
+
+
 
 
