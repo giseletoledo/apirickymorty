@@ -25,7 +25,7 @@ class HomeView:UIView {
            return searchBar
        }()
         
-    private lazy var tableView: UITableView = {
+    lazy var tableView: UITableView = {
         
         let tableView = UITableView(frame: .zero)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -48,10 +48,6 @@ class HomeView:UIView {
         tableView.dataSource = datasource
         tableView.delegate = delegate
         searchBar.delegate = searchBarDelegate
-    }
-
-    func updateTableView() {
-        tableView.reloadData()
     }
 }
 

@@ -14,10 +14,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     var currentPage = 1 // Mantenha o controle da página atual
     
     var isSearching = false
-
     
     private let networkManager: NetworkManagerProtocol = NetworkManager()
-        
+    
     private lazy var homeView = HomeView()
     
     override func viewDidLoad() {
@@ -29,14 +28,51 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
             print("arrayRickModel: \(self.arrayRickModel)")
             print("arrayRickModel.count \(self.arrayRickModel.count)")
             DispatchQueue.main.async {
-                self.homeView.updateTableView()
+                self.reloadData()
             }
         }
         
         homeView.configureProtocols(datasource: self, delegate: self, searchBarDelegate: self)
         navigationController?.delegate = self
     }
-
+    
+    fileprivate func reloadData() {
+        // Atualiza a tableView
+        self.homeView.tableView.reloadData()
+    }
+        
+    func searchName(character: String, _ completion: @escaping (Result<RickAPI, Error>) -> Void){
+        let urlString = "https://rickandmortyapi.com/api/character/?name=\(character)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        networkManager.get(request: request) { (result: Result<RickAPI, Error>) in
+            switch result {
+            case .success(let apiresults):
+                print("apiresults: \(apiresults)")
+                let data = apiresults
+                if let characters = data.results {
+                    for item in characters {
+                        // Check if the item already exists in the arrayRickModel
+                        if !self.results.contains(where: { rickModel in rickModel.title == item.name }) {
+                            self.results.append(RickModel(title: item.name, status: item.status,
+                                                                 lastKnownLocation: item.location?.name ?? "TESTE",
+                                                                 memories: item.species, imageNames: item.image))
+                        }                        }
+                }
+                completion(.success(apiresults))
+            case .failure(let error):
+                print("Erro ao buscar dados: \(error)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    
     
     func loadMoreData(_ completion: @escaping (Result<RickAPI, Error>) -> Void) {
         // Faça a requisição HTTP com base na página atual
@@ -52,16 +88,16 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
             switch result {
             case .success(let apiresults):
                 print("apiresults: \(apiresults)")
-                    let data = apiresults
-                    if let characters = data.results {
-                        for item in characters {
-                            // Check if the item already exists in the arrayRickModel
-                                                    if !self.arrayRickModel.contains(where: { rickModel in rickModel.title == item.name }) {
-                                                        self.arrayRickModel.append(RickModel(title: item.name, status: item.status,
-                                                                               lastKnownLocation: item.location?.name ?? "TESTE",
-                                                                               memories: item.species, imageNames: item.image))
-                                                    }                        }
-                    }
+                let data = apiresults
+                if let characters = data.results {
+                    for item in characters {
+                        // Check if the item already exists in the arrayRickModel
+                        if !self.arrayRickModel.contains(where: { rickModel in rickModel.title == item.name }) {
+                            self.arrayRickModel.append(RickModel(title: item.name, status: item.status,
+                                                                 lastKnownLocation: item.location?.name ?? "TESTE",
+                                                                 memories: item.species, imageNames: item.image))
+                        }                        }
+                }
                 completion(.success(apiresults))
             case .failure(let error):
                 print("Erro ao buscar dados: \(error)")
@@ -71,28 +107,26 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     }
 }
 
-
 extension ViewController: UISearchBarDelegate {
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // Filter the arrayRickModel based on the searchText
         isSearching = !searchText.isEmpty
         
         // Limpe a array de resultados
         results.removeAll()
         
         if isSearching {
-                results = arrayRickModel.filter { rickModel in
-                    rickModel.title.lowercased().contains(searchText.lowercased())
+            searchName(character: searchText) { _ in
+                DispatchQueue.main.async {
+                    self.reloadData()
                 }
-            } else {
-                results = arrayRickModel // Redefina para os resultados originais
             }
-        
-        // Update the tableView with the filtered results
-        homeView.updateTableView()
+        } else {
+            results = arrayRickModel // Redefina para os resultados originais
+        }
+//        self.reloadData()
     }
-
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -101,7 +135,8 @@ extension ViewController: UISearchBarDelegate {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isSearching ? results.count : 1
+        let count = isSearching ? results.count : arrayRickModel.count
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,13 +150,13 @@ extension ViewController: UITableViewDataSource {
         if isSearching {
             
             let model = results[indexPath.row]
-                            // Use the model to configure the cell
-                            cell.configure(model: model)
-                       
-           } else {
-               let model = arrayRickModel[indexPath.section] // Use os dados originais
-               cell.configure(model: model)
-           }
+            // Use the model to configure the cell
+            cell.configure(model: model)
+            
+        } else {
+            let model = arrayRickModel[indexPath.row] // Use os dados originais
+            cell.configure(model: model)
+        }
         cell.backgroundColor = .white
         return cell
     }
@@ -132,23 +167,18 @@ extension ViewController: UITableViewDelegate {
         
         // Crie uma instância da DetailViewController com os dados da célula selecionada
         let selectedModel: RickModel
-           
-           if isSearching {
-               selectedModel = results[indexPath.row]
-           } else {
-               selectedModel = arrayRickModel[indexPath.section]
-           }
+        
+        if isSearching {
+            selectedModel = results[indexPath.row]
+        } else {
+            selectedModel = arrayRickModel[indexPath.row]
+        }
         let detailViewController = DetailViewController(selectedModel: selectedModel)
         detailViewController.imageURL = URL(string: selectedModel.imageNames)
         // Apresente a DetailViewController
         navigationController?.pushViewController(detailViewController, animated: true)
     }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return isSearching ? 1 : arrayRickModel.count
-    }
 }
-
 
 
 protocol NetworkManagerProtocol {
