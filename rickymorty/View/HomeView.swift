@@ -9,6 +9,11 @@ import UIKit
 
 class HomeView:UIView {
     
+    var isToggled = false
+    
+    var radioButtonsViewHeightVisible: CGFloat!
+    var radioButtonsViewHeightConstraint: NSLayoutConstraint!
+
     private lazy var titleLabel: UILabel = {
            let label = UILabel()
            label.translatesAutoresizingMaskIntoConstraints = false
@@ -26,10 +31,6 @@ class HomeView:UIView {
         button.backgroundColor = .systemPink
         return button
     }()
-    
-    @objc func menuButtonTapped() {
-        radioButtonsView.isHidden.toggle() // Alternar entre visível e oculto
-    }
     
     public lazy var radioButtonsView: RadioButtonsView = {
         let view = RadioButtonsView()
@@ -58,12 +59,44 @@ class HomeView:UIView {
     
     init() {
         super.init(frame: .zero)
+        
         configureSubviews()
         configureSubviewsConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func toggleRadioButtonVisibility(animated: Bool = true) {
+        if radioButtonsViewHeightConstraint.constant != 0 {
+            radioButtonsViewHeightVisible = radioButtonsViewHeightConstraint.constant
+            radioButtonsViewHeightConstraint.constant = 0
+        } else {
+            radioButtonsViewHeightConstraint.constant = radioButtonsViewHeightVisible
+        }
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            self.layoutIfNeeded()
+        }
+    }
+    
+    
+    @objc func menuButtonTapped() {
+        // Alterna a visibilidade da view `radioButtonsView`
+        toggleRadioButtonVisibility()
+
+        // Atualiza a aparência do botão
+        if radioButtonsViewHeightConstraint.constant != 0 {
+            menuButton.backgroundColor = .systemGreen
+            menuButton.setTitle("Fechar", for: .normal)
+        } else {
+            menuButton.backgroundColor = .systemPink
+            menuButton.setTitle("Menu", for: .normal)
+        }
     }
     
     func configureProtocols(datasource: UITableViewDataSource, delegate: UITableViewDelegate, searchBarDelegate: UISearchBarDelegate){
@@ -96,7 +129,7 @@ extension HomeView{
             menuButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
             menuButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             menuButton.heightAnchor.constraint(equalToConstant: 36),
-            menuButton.widthAnchor.constraint(equalToConstant: 36),// Ajuste conforme necessário
+            menuButton.widthAnchor.constraint(equalToConstant: 36),
             
             radioButtonsView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
             radioButtonsView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
