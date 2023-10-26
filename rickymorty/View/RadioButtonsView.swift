@@ -22,6 +22,7 @@ class RadioButtonsView: UIView {
         button.setImage(UIImage(named: "radio_checked"), for: .selected)
         button.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
         button.tag = 0 // Tag para identificar o botão "alive"
+        button.backgroundColor = .green
         return button
     }()
 
@@ -32,6 +33,7 @@ class RadioButtonsView: UIView {
         button.setImage(UIImage(named: "radio_checked"), for: .selected)
         button.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
         button.tag = 1 // Tag para identificar o botão "dead"
+        button.backgroundColor = .blue
         return button
     }()
 
@@ -42,6 +44,7 @@ class RadioButtonsView: UIView {
         button.setImage(UIImage(named: "radio_checked"), for: .selected)
         button.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
         button.tag = 2 // Tag para identificar o botão "unknown"
+        button.backgroundColor = .yellow
         return button
     }()
 
@@ -60,33 +63,23 @@ class RadioButtonsView: UIView {
         addSubview(aliveRadioButton)
         addSubview(deadRadioButton)
         addSubview(unknownRadioButton)
-
-        // Adiciona ações para os botões de seleção
-        aliveRadioButton.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
-        deadRadioButton.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
-        unknownRadioButton.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
     }
 
     // Configurando os botões de seleção horizontalmente
     private func configureConstraints() {
         NSLayoutConstraint.activate([
-           
             aliveRadioButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             aliveRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-
-            deadRadioButton.leadingAnchor.constraint(equalTo: aliveRadioButton.trailingAnchor, constant: 16),
-            deadRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-
-            unknownRadioButton.leadingAnchor.constraint(equalTo: deadRadioButton.trailingAnchor, constant: 16),
-            unknownRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-
-            // Configurar o tamanho dos botões
             aliveRadioButton.widthAnchor.constraint(equalToConstant: 30),
             aliveRadioButton.heightAnchor.constraint(equalToConstant: 30),
 
+            deadRadioButton.leadingAnchor.constraint(equalTo: aliveRadioButton.trailingAnchor, constant: 16),
+            deadRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             deadRadioButton.widthAnchor.constraint(equalToConstant: 30),
             deadRadioButton.heightAnchor.constraint(equalToConstant: 30),
 
+            unknownRadioButton.leadingAnchor.constraint(equalTo: deadRadioButton.trailingAnchor, constant: 16),
+            unknownRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             unknownRadioButton.widthAnchor.constraint(equalToConstant: 30),
             unknownRadioButton.heightAnchor.constraint(equalToConstant: 30),
         ])
