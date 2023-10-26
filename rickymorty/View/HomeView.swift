@@ -23,16 +23,18 @@ class HomeView:UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Menu", for: .normal)
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
+        button.backgroundColor = .systemPink
         return button
     }()
     
     @objc func menuButtonTapped() {
-            radioButtonsView.isHidden.toggle() // Alternar entre visível e oculto
-        }
+        radioButtonsView.isHidden.toggle() // Alternar entre visível e oculto
+    }
     
     public lazy var radioButtonsView: RadioButtonsView = {
         let view = RadioButtonsView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .red
         return view
     }()
        
@@ -88,15 +90,18 @@ extension HomeView{
             
             searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
             searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             
             // Posicione o botão ao lado da searchBar
-            menuButton.topAnchor.constraint(equalTo: searchBar.topAnchor),
-            menuButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8), // Ajuste conforme necessário
+            menuButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor),
+            menuButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
+            menuButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            menuButton.heightAnchor.constraint(equalToConstant: 36),
+            menuButton.widthAnchor.constraint(equalToConstant: 36),// Ajuste conforme necessário
             
             radioButtonsView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
             radioButtonsView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             radioButtonsView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            radioButtonsView.heightAnchor.constraint(equalToConstant: 200),
             
             tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),

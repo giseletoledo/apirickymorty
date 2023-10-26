@@ -39,16 +39,18 @@ class ViewController: UIViewController, UINavigationControllerDelegate, RadioBut
     
     func radioButtonView(_ view: RadioButtonsView, didSelectStatus status: String) {
         guard let searchText = homeView.searchBar.text else { return }
-               searchName(character: searchText, status: status, species: "") { result in
-                   switch result {
-                   case .success(_):
-                       self.reloadData()
-                   case .failure(let error):
-                       print("Erro na busca: \(error)")
-                   }
-               }
-       
-       }
+        searchName(character: searchText, status: status, species: "") { result in
+            switch result {
+            case .success(_):
+                DispatchQueue.main.async {
+                    self.reloadData()
+                }
+            case .failure(let error):
+                print("Erro na busca: \(error)")
+            }
+        }
+        
+    }
     
     fileprivate func reloadData() {
         // Atualiza a tableView
@@ -56,12 +58,14 @@ class ViewController: UIViewController, UINavigationControllerDelegate, RadioBut
     }
     
     func searchName(character: String, status: String, species: String, completion: @escaping (Result<RickAPI, Error>) -> Void) {
+        self.results.removeAll()
+        isSearching = true
         var urlString = "https://rickandmortyapi.com/api/character/?name=\(character)"
         
         if !status.isEmpty {
             urlString += "&status=\(status)"
         }
-       
+        
         guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
             return
@@ -76,11 +80,13 @@ class ViewController: UIViewController, UINavigationControllerDelegate, RadioBut
                 if let characters = data.results {
                     for item in characters {
                         // Check if the item already exists in the arrayRickModel
-                        if !self.results.contains(where: { rickModel in rickModel.title == item.name }) {
-                            self.results.append(RickModel(title: item.name, status: item.status,
-                                                          lastKnownLocation: item.location?.name ?? "TESTE",
-                                                          memories: item.species, imageNames: item.image))
-                        }                        }
+                        //                        if !self.results.contains(where: { rickModel in rickModel.title == item.name }) {
+                        self.results.append(RickModel(title: item.name, status: item.status,
+                                                      lastKnownLocation: item.location?.name ?? "TESTE",
+                                                      memories: item.species, imageNames: item.image))
+                        //                        }
+                        
+                    }
                 }
                 completion(.success(apiresults))
             case .failure(let error):
@@ -112,11 +118,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, RadioBut
                         // Check if the item already exists in the arrayRickModel
                         if !self.arrayRickModel.contains(where: { rickModel in rickModel.title == item.name }) {
                             self.arrayRickModel.append(RickModel(title: item.name, status: item.status,lastKnownLocation: item.location?.name ?? "TESTE",
-                                memories: item.species, imageNames: item.image))
+                                                                 memories: item.species, imageNames: item.image))
                         }                        }
                 }
                 completion(.success(apiresults))
-                case .failure(let error):
+            case .failure(let error):
                 print("Erro ao buscar dados: \(error)")
                 completion(.failure(error))
             }
