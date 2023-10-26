@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UINavigationControllerDelegate {
+class ViewController: UIViewController, UINavigationControllerDelegate, RadioButtonsViewDelegate {
     
     private var arrayRickModel: [RickModel] = []
     private var results: [RickModel] = []
@@ -23,6 +23,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         view = homeView
         view.backgroundColor = .white
+        homeView.radioButtonsView.delegate = self
         // Carregue os dados da API quando a vista é carregada
         loadMoreData { _ in
             print("arrayRickModel: \(self.arrayRickModel)")
@@ -36,14 +37,31 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         navigationController?.delegate = self
     }
     
+    func radioButtonView(_ view: RadioButtonsView, didSelectStatus status: String) {
+        guard let searchText = homeView.searchBar.text else { return }
+               searchName(character: searchText, status: status, species: "") { result in
+                   switch result {
+                   case .success(_):
+                       self.reloadData()
+                   case .failure(let error):
+                       print("Erro na busca: \(error)")
+                   }
+               }
+       
+       }
+    
     fileprivate func reloadData() {
         // Atualiza a tableView
         self.homeView.tableView.reloadData()
     }
+    
+    func searchName(character: String, status: String, species: String, completion: @escaping (Result<RickAPI, Error>) -> Void) {
+        var urlString = "https://rickandmortyapi.com/api/character/?name=\(character)"
         
-    func searchName(character: String, _ completion: @escaping (Result<RickAPI, Error>) -> Void){
-        let urlString = "https://rickandmortyapi.com/api/character/?name=\(character)"
-        
+        if !status.isEmpty {
+            urlString += "&status=\(status)"
+        }
+       
         guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
             return
@@ -60,8 +78,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
                         // Check if the item already exists in the arrayRickModel
                         if !self.results.contains(where: { rickModel in rickModel.title == item.name }) {
                             self.results.append(RickModel(title: item.name, status: item.status,
-                                                                 lastKnownLocation: item.location?.name ?? "TESTE",
-                                                                 memories: item.species, imageNames: item.image))
+                                                          lastKnownLocation: item.location?.name ?? "TESTE",
+                                                          memories: item.species, imageNames: item.image))
                         }                        }
                 }
                 completion(.success(apiresults))
@@ -93,13 +111,12 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
                     for item in characters {
                         // Check if the item already exists in the arrayRickModel
                         if !self.arrayRickModel.contains(where: { rickModel in rickModel.title == item.name }) {
-                            self.arrayRickModel.append(RickModel(title: item.name, status: item.status,
-                                                                 lastKnownLocation: item.location?.name ?? "TESTE",
-                                                                 memories: item.species, imageNames: item.image))
+                            self.arrayRickModel.append(RickModel(title: item.name, status: item.status,lastKnownLocation: item.location?.name ?? "TESTE",
+                                memories: item.species, imageNames: item.image))
                         }                        }
                 }
                 completion(.success(apiresults))
-            case .failure(let error):
+                case .failure(let error):
                 print("Erro ao buscar dados: \(error)")
                 completion(.failure(error))
             }
@@ -116,7 +133,7 @@ extension ViewController: UISearchBarDelegate {
         results.removeAll()
         
         if isSearching {
-            searchName(character: searchText) { _ in
+            searchName(character: searchText, status: "", species: "") { _ in
                 DispatchQueue.main.async {
                     self.reloadData()
                 }
@@ -124,7 +141,6 @@ extension ViewController: UISearchBarDelegate {
         } else {
             results = arrayRickModel // Redefina para os resultados originais
         }
-//        self.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

@@ -17,8 +17,26 @@ class HomeView:UIView {
            label.text = "Characters"
            return label
        }()
+    
+    private lazy var menuButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Menu", for: .normal)
+        button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func menuButtonTapped() {
+            radioButtonsView.isHidden.toggle() // Alternar entre visível e oculto
+        }
+    
+    public lazy var radioButtonsView: RadioButtonsView = {
+        let view = RadioButtonsView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
        
-       private lazy var searchBar: UISearchBar = {
+    lazy var searchBar: UISearchBar = {
            let searchBar = UISearchBar()
            searchBar.backgroundColor = .white
            searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -35,6 +53,7 @@ class HomeView:UIView {
         return tableView
     }()
     
+    
     init() {
         super.init(frame: .zero)
         configureSubviews()
@@ -44,6 +63,7 @@ class HomeView:UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     func configureProtocols(datasource: UITableViewDataSource, delegate: UITableViewDelegate, searchBarDelegate: UISearchBarDelegate){
         tableView.dataSource = datasource
         tableView.delegate = delegate
@@ -56,26 +76,35 @@ extension HomeView{
     func configureSubviews() {
         self.addSubview(titleLabel)
         self.addSubview(searchBar)
+        self.addSubview(menuButton)
+        self.addSubview(radioButtonsView)
         self.addSubview(tableView)
     }
     
     func configureSubviewsConstraints() {
-        
         NSLayoutConstraint.activate([
-            
             titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-                       
-                       searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-                       searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-                       searchBar.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-                       
-                       tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
-                       tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                       tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-                       tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            
+            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+            searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            searchBar.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            
+            // Posicione o botão ao lado da searchBar
+            menuButton.topAnchor.constraint(equalTo: searchBar.topAnchor),
+            menuButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8), // Ajuste conforme necessário
+            
+            radioButtonsView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
+            radioButtonsView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            radioButtonsView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            
+            tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16),
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
+
 }
 
 

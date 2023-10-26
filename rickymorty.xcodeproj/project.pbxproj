@@ -15,6 +15,7 @@
 		C166C2BA2AC39E61009FBCE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C166C2B82AC39E61009FBCE6 /* LaunchScreen.storyboard */; };
 		C166C2C62AC3A608009FBCE6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C166C2C52AC3A608009FBCE6 /* HomeView.swift */; };
 		C166C2C92AC3AA81009FBCE6 /* HomeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C166C2C82AC3AA81009FBCE6 /* HomeViewCell.swift */; };
+		C1AC84D52AEAA2F2009F48A9 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AC84D42AEAA2F2009F48A9 /* RadioButtonsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		C166C2BB2AC39E61009FBCE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C166C2C52AC3A608009FBCE6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		C166C2C82AC3AA81009FBCE6 /* HomeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewCell.swift; sourceTree = "<group>"; };
+		C1AC84D42AEAA2F2009F48A9 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				C166C2C72AC3AA60009FBCE6 /* Cell */,
 				C166C2B82AC39E61009FBCE6 /* LaunchScreen.storyboard */,
 				C166C2C52AC3A608009FBCE6 /* HomeView.swift */,
+				C1AC84D42AEAA2F2009F48A9 /* RadioButtonsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -187,6 +190,7 @@
 				C1046E822AC4797F009576EB /* RickModel.swift in Sources */,
 				C166C2C92AC3AA81009FBCE6 /* HomeViewCell.swift in Sources */,
 				C1046E842AC72C5F009576EB /* DetailViewController.swift in Sources */,
+				C1AC84D52AEAA2F2009F48A9 /* RadioButtonsView.swift in Sources */,
 				C166C2B22AC39E5E009FBCE6 /* ViewController.swift in Sources */,
 				C166C2AE2AC39E5E009FBCE6 /* AppDelegate.swift in Sources */,
 			);
