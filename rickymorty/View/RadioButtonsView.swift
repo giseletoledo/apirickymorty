@@ -52,8 +52,8 @@ class RadioButtonsView: UIView {
     private lazy var aliveRadioButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "radio_unchecked"), for: .normal)
-        button.setImage(UIImage(named: "radio_checked"), for: .selected)
+        button.setImage(UIImage(systemName: "smallcircle.circle"), for: .normal)
+        button.setImage(UIImage(systemName: "smallcircle.filled.circle"), for: .selected)
         button.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
         button.tag = 0 // Tag para identificar o botão "alive"
         button.backgroundColor = .green
@@ -63,8 +63,8 @@ class RadioButtonsView: UIView {
     private lazy var deadRadioButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "radio_unchecked"), for: .normal)
-        button.setImage(UIImage(named: "radio_checked"), for: .selected)
+        button.setImage(UIImage(systemName: "smallcircle.circle"), for: .normal)
+        button.setImage(UIImage(systemName: "smallcircle.filled.circle"), for: .selected)
         button.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
         button.tag = 1 // Tag para identificar o botão "dead"
         button.backgroundColor = .blue
@@ -74,8 +74,8 @@ class RadioButtonsView: UIView {
     private lazy var unknownRadioButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "radio_unchecked"), for: .normal)
-        button.setImage(UIImage(named: "radio_checked"), for: .selected)
+        button.setImage(UIImage(systemName: "smallcircle.circle"), for: .normal)
+        button.setImage(UIImage(systemName: "smallcircle.filled.circle"), for: .selected)
         button.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
         button.tag = 2 // Tag para identificar o botão "unknown"
         button.backgroundColor = .yellow

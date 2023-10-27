@@ -10,7 +10,7 @@ import UIKit
 class HomeView:UIView {
     
     var isToggled = false
-
+    
     var radioButtonsViewHeightConstraint: CGFloat = 200
     
     var tableViewTopConstraint: NSLayoutConstraint!
@@ -28,8 +28,9 @@ class HomeView:UIView {
     private lazy var menuButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Menu", for: .normal)
+        button.setImage(UIImage(systemName: "text.justify"), for: .normal)
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
+        button.tintColor = .white
         button.backgroundColor = .systemPink
         return button
     }()
@@ -89,7 +90,7 @@ class HomeView:UIView {
             tableViewTopConstraint?.isActive = false
 
             // Crie a nova restrição e a ative
-            tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 200)
+            tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16)
             tableViewTopConstraint?.isActive = true
             
             isToggled = false
@@ -127,7 +128,7 @@ extension HomeView{
     func configureSubviewsConstraints() {
         
         tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16)
-           tableViewTopConstraint?.isActive = true
+           tableViewTopConstraint?.isActive = false
         
         
         NSLayoutConstraint.activate([
