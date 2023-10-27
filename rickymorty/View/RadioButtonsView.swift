@@ -15,6 +15,40 @@ class RadioButtonsView: UIView {
     
     weak var delegate: RadioButtonsViewDelegate?
     
+    private lazy var container: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
+    // UILabel para identificar o RadioButton "alive"
+    private lazy var aliveLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Alive"
+        label.textColor = .black
+        return label
+    }()
+
+    // UILabel para identificar o RadioButton "dead"
+    private lazy var deadLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Dead"
+        label.textColor = .black
+        return label
+    }()
+
+    // UILabel para identificar o RadioButton "unknown"
+    private lazy var unknownLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Unknown"
+        label.textColor = .black
+        return label
+    }()
+    
     private lazy var aliveRadioButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -59,32 +93,17 @@ class RadioButtonsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+ 
     private func configureRadioButtons() {
-        addSubview(aliveRadioButton)
-        addSubview(deadRadioButton)
-        addSubview(unknownRadioButton)
+        addSubview(container)
+        container.addSubview(aliveLabel)
+        container.addSubview(aliveRadioButton)
+        container.addSubview(deadLabel)
+        container.addSubview(deadRadioButton)
+        container.addSubview(unknownLabel)
+        container.addSubview(unknownRadioButton)
     }
-
-    // Configurando os botões de seleção horizontalmente
-    private func configureConstraints() {
-        NSLayoutConstraint.activate([
-            aliveRadioButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            aliveRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            aliveRadioButton.widthAnchor.constraint(equalToConstant: 30),
-            aliveRadioButton.heightAnchor.constraint(equalToConstant: 30),
-
-            deadRadioButton.leadingAnchor.constraint(equalTo: aliveRadioButton.trailingAnchor, constant: 16),
-            deadRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            deadRadioButton.widthAnchor.constraint(equalToConstant: 30),
-            deadRadioButton.heightAnchor.constraint(equalToConstant: 30),
-
-            unknownRadioButton.leadingAnchor.constraint(equalTo: deadRadioButton.trailingAnchor, constant: 16),
-            unknownRadioButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            unknownRadioButton.widthAnchor.constraint(equalToConstant: 30),
-            unknownRadioButton.heightAnchor.constraint(equalToConstant: 30),
-        ])
-    }
-
+    
     
     @objc func radioButtonTapped(_ sender: UIButton) {
         // Alterna o estado de seleção do botão pressionado
@@ -97,7 +116,7 @@ class RadioButtonsView: UIView {
             }
         }
 
-        // Agora você pode usar o valor da tag para identificar o botão selecionado
+        // Valor da tag para identificar o botão selecionado
         let selectedStatus: String
         switch sender.tag {
         case 0:
@@ -107,11 +126,38 @@ class RadioButtonsView: UIView {
         case 2:
             selectedStatus = "unknown"
         default:
-            selectedStatus = "" // Valor padrão ou tratamento de erro, se necessário
+            selectedStatus = ""
         }
-        
         delegate?.radioButtonView(self, didSelectStatus: selectedStatus)
-        
     }
 
+    // Configurando os botões de seleção horizontalmente
+    private func configureConstraints() {
+        NSLayoutConstraint.activate([
+       // Container
+        container.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+        container.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+        container.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+        container.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+        container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+        
+        // Labels
+        aliveLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+        deadLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+        unknownLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+
+        aliveLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: -60),
+        deadLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+        unknownLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: 60),
+
+        // RadioButtons
+        aliveRadioButton.topAnchor.constraint(equalTo: aliveLabel.bottomAnchor, constant: 8),
+        deadRadioButton.topAnchor.constraint(equalTo: deadLabel.bottomAnchor, constant: 8),
+        unknownRadioButton.topAnchor.constraint(equalTo: unknownLabel.bottomAnchor, constant: 8),
+
+        aliveRadioButton.centerXAnchor.constraint(equalTo: aliveLabel.centerXAnchor),
+        deadRadioButton.centerXAnchor.constraint(equalTo: deadLabel.centerXAnchor),
+        unknownRadioButton.centerXAnchor.constraint(equalTo: unknownLabel.centerXAnchor),
+        ])
+    }
 }
