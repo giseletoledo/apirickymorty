@@ -10,10 +10,11 @@ import UIKit
 class HomeView:UIView {
     
     var isToggled = false
-    
-    var radioButtonsViewHeightConstraint: CGFloat = 200
+
+    var radioButtonsViewHeightConstraint: CGFloat!
     
     var tableViewTopConstraint: NSLayoutConstraint!
+    var initialTableViewTopConstraint: NSLayoutConstraint?
 
 
     private lazy var titleLabel: UILabel = {
@@ -77,7 +78,7 @@ class HomeView:UIView {
             tableViewTopConstraint?.isActive = false
 
             // Crie a nova restrição e a ative
-            tableViewTopConstraint = tableView.topAnchor.constraint(equalTo:  searchBar.bottomAnchor, constant: 0)
+            tableViewTopConstraint = tableView.topAnchor.constraint(equalTo:  radioButtonsView.bottomAnchor, constant: 0)
             tableViewTopConstraint?.isActive = true
             
             isToggled = true
@@ -90,7 +91,7 @@ class HomeView:UIView {
             tableViewTopConstraint?.isActive = false
 
             // Crie a nova restrição e a ative
-            tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16)
+            tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16)
             tableViewTopConstraint?.isActive = true
             
             isToggled = false
@@ -126,10 +127,10 @@ extension HomeView{
     }
     
     func configureSubviewsConstraints() {
-        
-        tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16)
-           tableViewTopConstraint?.isActive = false
-        
+        tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16)
+                tableViewTopConstraint?.isActive = true
+
+                initialTableViewTopConstraint = tableViewTopConstraint
         
         NSLayoutConstraint.activate([
             
@@ -150,7 +151,7 @@ extension HomeView{
             radioButtonsView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16),
             radioButtonsView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             radioButtonsView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            radioButtonsView.heightAnchor.constraint(equalToConstant: radioButtonsViewHeightConstraint),
+            radioButtonsView.heightAnchor.constraint(equalToConstant: 200),
            
             tableView.topAnchor.constraint(equalTo: radioButtonsView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
